@@ -224,6 +224,13 @@
                                 [tmpReplaceShowArr removeObjectAtIndex:0];
                                 [tmpReplaceOriArr  removeObjectAtIndex:0];
                                 i ++;
+                            } else {
+                                if (i == tmpOriArr.count - 1) {
+                                    [tmpOriArr addObjectsFromArray:tmpReplaceOriArr];
+                                    [tmpShowArr addObjectsFromArray:tmpReplaceShowArr];
+                                    [tmpReplaceOriArr removeAllObjects];
+                                    [tmpReplaceShowArr removeAllObjects];
+                                }
                             }
                         }
                     }
