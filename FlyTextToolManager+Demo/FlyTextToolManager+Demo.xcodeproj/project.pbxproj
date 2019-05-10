@@ -14,6 +14,7 @@
 		7B1E14172277F703004DDC9E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B1E14152277F703004DDC9E /* LaunchScreen.storyboard */; };
 		7B1E141A2277F703004DDC9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B1E14192277F703004DDC9E /* main.m */; };
 		7B1E14222277F74C004DDC9E /* FlyTextToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B1E14212277F74C004DDC9E /* FlyTextToolManager.m */; };
+		7BF047C52285152900129E8D /* FlyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF047C42285152900129E8D /* FlyTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		7B1E14192277F703004DDC9E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7B1E14202277F74C004DDC9E /* FlyTextToolManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlyTextToolManager.h; sourceTree = "<group>"; };
 		7B1E14212277F74C004DDC9E /* FlyTextToolManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlyTextToolManager.m; sourceTree = "<group>"; };
+		7BF047C32285152900129E8D /* FlyTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlyTextView.h; sourceTree = "<group>"; };
+		7BF047C42285152900129E8D /* FlyTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlyTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 				7B1E140E2277F700004DDC9E /* ViewController.m */,
 				7B1E14202277F74C004DDC9E /* FlyTextToolManager.h */,
 				7B1E14212277F74C004DDC9E /* FlyTextToolManager.m */,
+				7BF047C32285152900129E8D /* FlyTextView.h */,
+				7BF047C42285152900129E8D /* FlyTextView.m */,
 				7B1E14102277F701004DDC9E /* Main.storyboard */,
 				7B1E14132277F703004DDC9E /* Assets.xcassets */,
 				7B1E14152277F703004DDC9E /* LaunchScreen.storyboard */,
@@ -150,6 +155,7 @@
 				7B1E140F2277F700004DDC9E /* ViewController.m in Sources */,
 				7B1E141A2277F703004DDC9E /* main.m in Sources */,
 				7B1E140C2277F700004DDC9E /* AppDelegate.m in Sources */,
+				7BF047C52285152900129E8D /* FlyTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
