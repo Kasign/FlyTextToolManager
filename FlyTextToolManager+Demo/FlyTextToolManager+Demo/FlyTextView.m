@@ -10,8 +10,9 @@
 
 @interface FlyTextView ()<UITextViewDelegate>
 
-@property (nonatomic, copy) NSString   *   oldText;
-@property (nonatomic, copy) NSString   *   replaceText;
+@property (nonatomic, copy)   NSAttributedString   *   oldAttriText;
+@property (nonatomic, copy)   NSString   *   oldText;
+@property (nonatomic, copy)   NSString   *   replaceText;
 @property (nonatomic, assign) NSRange      replaceRange;
 
 @end
@@ -88,6 +89,7 @@
     _replaceText = text;
     if (!textView.markedTextRange) {
         _replaceRange = range;
+        _oldAttriText = textView.attributedText;
         _oldText = textView.text;
     }
     return result;
@@ -95,30 +97,44 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     
-    if (!self.markedTextRange) {
+    if (!self.markedTextRange && _replaceText) {
         
-        NSRange replaceRange   = _replaceRange;
-        NSString * replaceText = _replaceText;
-        //9的系统在字母转换到汉字的时候会少调用shouldChangeTextInRange，此处做特殊处理
+        NSRange replaceRange   = NSMakeRange(_replaceRange.location, _replaceRange.length);
+        NSString * replaceText = [_replaceText copy];
+        
         if ([UIDevice currentDevice].systemVersion.floatValue < 10.0) {
             NSInteger subCount      = textView.text.length - _oldText.length;
-            NSInteger rangeLength   = _replaceRange.length;
+            NSInteger rangeLength   = replaceRange.length;
             rangeLength   = MAX(0, rangeLength + subCount);
-            NSInteger rangeLocation = _replaceRange.location;
+            NSInteger rangeLocation = replaceRange.location;
             rangeLocation = MIN(textView.text.length - rangeLength, rangeLocation);
             NSRange didReplaceRange = NSMakeRange(rangeLocation, rangeLength);
             replaceText = [textView.text substringWithRange:didReplaceRange];
-            _replaceRange = NSMakeRange(textView.text.length, 0);
-            _oldText = textView.text;
-        }
-
-        //将限制的字符处理掉
-        if (_isLimitEmoji) {
-//            replaceText = [replaceText stringByRemoveEmoji];
         }
         
-        if ([self canResponseDelegate:@selector(fly_textViewWillChange:replaceText:inRange:)]) {
-            [_fly_delegate fly_textViewWillChange:self replaceText:replaceText inRange:replaceRange];
+        if (_isLimitEmoji) {
+//            replaceText = [replaceText stringByRemoveEmoji];
+            if (replaceText.length != _replaceText.length) {
+                //校验一遍
+                if (textView.text.length + replaceRange.length - replaceText.length != _oldText.length) {
+                    replaceRange.location = textView.selectedRange.location;
+                    replaceRange.length   = _oldText.length - textView.text.length + replaceText.length;
+                }
+            }
+        }
+        
+        if (textView.text.length + replaceRange.length - replaceText.length == _oldText.length) {
+            if ([self canResponseDelegate:@selector(fly_textViewWillChange:replaceText:inRange:)]) {
+                [_fly_delegate fly_textViewWillChange:self replaceText:replaceText inRange:replaceRange];
+                _oldText      = self.text;
+                _replaceRange = self.selectedRange;
+                if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+                    _replaceText = nil;
+                }
+            }
+        } else {
+            [self setAttributedText:_oldAttriText];
+            /* 长按删除的时候，textView的字符会与之前的发生诡异的变化 */
         }
     }
 }
@@ -144,6 +160,14 @@
     
     if ([self canResponseDelegate:@selector(fly_textViewDidChangeSelection:selectedRange:)]) {
         [self.fly_delegate fly_textViewDidChangeSelection:self selectedRange:textView.selectedRange];
+    }
+}
+
+- (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
+    
+    if (self.markedTextRange && [_markAttriDic isKindOfClass:[NSDictionary class]]) {
+        NSRange markedRange = [self markedRang];
+        [textStorage setAttributes:_markAttriDic range:markedRange];
     }
 }
 
